@@ -1,0 +1,15 @@
+{
+  "name": "r2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Brux Romuar <brux@bruxomuar.com>",
+  "license": "GNU",
+  "dependencies": {
+    "koa": "^2.13.0"
+  }
+}
