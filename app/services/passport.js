@@ -1,8 +1,17 @@
+const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const passport = require('koa-passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 const User = require('../models/user');
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
 
 passport.use(new LocalStrategy(async (username, password, done) => {
   const user = await User.findOne({ email: username }).exec();

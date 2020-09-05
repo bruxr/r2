@@ -2868,6 +2868,14 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
+koa-async-validator@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/koa-async-validator/-/koa-async-validator-0.4.1.tgz#ce5251b939db7d4fdce2f91ec66b183b77f72b6d"
+  integrity sha512-LMGHS8Q+ThEdaMorlxUc1xLyZwuYkU/mawjmg1bD7qfUeelSF43WJr8kyqDntoOorYn4Oeskuu4MJh5t1mmmgg==
+  dependencies:
+    lodash "^4.16.4"
+    validator "^11.0.0"
+
 koa-bodyparser@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/koa-bodyparser/-/koa-bodyparser-4.3.0.tgz#274c778555ff48fa221ee7f36a9fbdbace22759a"
@@ -2980,7 +2988,7 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
-lodash@^4.17.19:
+lodash@^4.16.4, lodash@^4.17.19, lodash@^4.17.20:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -4689,6 +4697,11 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+validator@^11.0.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-11.1.0.tgz#ac18cac42e0aa5902b603d7a5d9b7827e2346ac4"
+  integrity sha512-qiQ5ktdO7CD6C/5/mYV4jku/7qnqzjrxb3C/Q5wR3vGGinHTgJZN/TdFT3ZX4vXhX2R1PXx42fB1cn5W+uJ4lg==
 
 vary@^1.1.2:
   version "1.1.2"
