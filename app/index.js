@@ -9,7 +9,7 @@ const usersRouter = require('./routes/users');
 const app = new Koa();
 
 app.use(bodyParser());
-app.use(validator);
+app.use(validator.middleware);
 app.use(passport.initialize());
 
 app.use(usersRouter.routes())

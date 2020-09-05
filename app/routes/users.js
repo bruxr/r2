@@ -4,29 +4,20 @@ const Router = require('koa-router');
 
 const User = require('../models/user');
 const passport = require('../services/passport');
+const validator = require('../services/validator');
 
 const router = new Router();
 
-router.post(
-  '/login',
-  async (ctx, next) => {
-    ctx.checkBody({
-      username: {
-        notEmpty: true,
-        isEmail: true,
-      },
-      password: {
-        notEmpty: true,
-      },
-    });
-    const errors = await ctx.validationErrors();
-    if (errors) {
-      ctx.body = { errors };
-      ctx.status = 400;
-    } else {
-      await next();
-    }
-  },
+router.post('/login',
+  validator.validate({
+    username: {
+      notEmpty: true,
+      isEmail: true,
+    },
+    password: {
+      notEmpty: true,
+    },
+  }),
   async (ctx, next) => {
     return passport.authenticate('local', { session: false }, (err, user) => {
       if (user) {
@@ -41,32 +32,22 @@ router.post(
   },
 );
 
-router.post(
-  '/register',
-  async (ctx, next) => {
-    ctx.checkBody({
-      email: {
-        notEmpty: true,
-        isEmail: true,
-      },
-      password: {
-        notEmpty: true,
-      },
-      firstName: {
-        notEmpty: true,
-      },
-      lastName: {
-        notEmpty: true,
-      },
-    });
-    const errors = await ctx.validationErrors();
-    if (errors) {
-      ctx.body = { errors };
-      ctx.status = 400;
-    } else {
-      await next();
-    }
-  },
+router.post('/register',
+  validator.validate({
+    email: {
+      notEmpty: true,
+      isEmail: true,
+    },
+    password: {
+      notEmpty: true,
+    },
+    firstName: {
+      notEmpty: true,
+    },
+    lastName: {
+      notEmpty: true,
+    },
+  }),
   async (ctx, next) => {
     const { email, password, firstName, lastName } = ctx.request.body;
     const user = await User.create({
