@@ -8,3 +8,11 @@ services:
             - /usr/app/node_modules
         ports:
             - "3000:3000"
+        depends_on: 
+            - mongo
+        environment: 
+            MONGO_URL: mongodb://localhost:27017/r2
+    mongo:
+        image: mongo
+        ports: 
+            - "27017:27017"
