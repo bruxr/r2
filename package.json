@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Brux Romuar <brux@bruxomuar.com>",
-  "license": "GNU",
+  "license": "UNLICENSED",
   "dependencies": {
     "koa": "^2.13.0"
   }
