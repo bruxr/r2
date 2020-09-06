@@ -7,8 +7,14 @@ const validate = (rules) => {
     ctx.checkBody(rules);
     const errors = await ctx.validationErrors();
     if (errors) {
-      ctx.body = { errors };
-      ctx.status = 400;
+      ctx.body = {
+        errors: errors.map((error) => ({
+          source: `/${error.param}`,
+          title: 'Invalid Param',
+          detail: error.msg,
+        })),
+      };
+      ctx.status = 422;
     } else {
       await next();
     }
