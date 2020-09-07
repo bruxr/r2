@@ -12,6 +12,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0",
     "koa-async-validator": "^0.4.1",
     "koa-bodyparser": "^4.3.0",

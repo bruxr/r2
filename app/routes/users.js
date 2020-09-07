@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const { omit } = require('lodash');
+const jwt = require('jsonwebtoken');
 const Router = require('koa-router');
 
 const User = require('../models/user');
+const config = require('../../config/app.json');
 const passport = require('../services/passport');
 const validator = require('../services/validator');
 
@@ -18,9 +20,12 @@ router.post('/login',
       notEmpty: true,
     },
   }),
-  async (ctx) => {
-    return passport.authenticate('local', { session: false }, (err, user) => {
+  (ctx) => {
+    return passport.authenticate('local', { session: false }, async (err, user) => {
       if (user) {
+        user.token = jwt.sign({ userId: user._id }, config.appSecret);
+        user.save();
+
         ctx.body = omit(user.toJSON(), ['password']);
         return ctx.login(user);
       } else {

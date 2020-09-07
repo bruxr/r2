@@ -42,4 +42,16 @@ describe('POST /login', () => {
     expect(res.status).to.equal(200);
     expect(res.body.email).to.equal(testUser.email);
   });
+
+  it('should return a token if credentials are valid', async () => {
+    await mongoose.connection.collections.users.insertOne(testUser);
+
+    const res = await request
+      .post('/login')
+      .send({ username: testUser.email, password: testPassword })
+      .set('Content-type', 'application/json');
+
+    expect(res.status).to.equal(200);
+    expect(res.body.token).to.not.be.undefined;
+  });
 });
