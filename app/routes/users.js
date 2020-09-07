@@ -18,7 +18,7 @@ router.post('/login',
       notEmpty: true,
     },
   }),
-  async (ctx, next) => {
+  async (ctx) => {
     return passport.authenticate('local', { session: false }, (err, user) => {
       if (user) {
         ctx.body = _.omit(user.toJSON(), ['password']);
@@ -28,7 +28,6 @@ router.post('/login',
         ctx.throw(400);
       }
     })(ctx);
-    await next();
   },
 );
 
