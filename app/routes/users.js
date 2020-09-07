@@ -1,5 +1,5 @@
-const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const { omit } = require('lodash');
 const Router = require('koa-router');
 
 const User = require('../models/user');
@@ -21,7 +21,7 @@ router.post('/login',
   async (ctx) => {
     return passport.authenticate('local', { session: false }, (err, user) => {
       if (user) {
-        ctx.body = _.omit(user.toJSON(), ['password']);
+        ctx.body = omit(user.toJSON(), ['password']);
         return ctx.login(user);
       } else {
         ctx.body = { error: 'Invalid credentials.' };
@@ -56,7 +56,7 @@ router.post('/register',
       lastName,
     });
 
-    ctx.body = _.omit(user.toJSON(), ['password']);
+    ctx.body = omit(user.toJSON(), ['password']);
     await next();
   },
 );
