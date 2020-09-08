@@ -65,4 +65,13 @@ router.post('/register',
   },
 );
 
+router.get('/me',
+  passport.authenticate('local'),
+  async (ctx, next) => {
+    // TODO: Update this
+    console.log(ctx.request.user);
+    await next();
+  },
+);
+
 module.exports = router;
