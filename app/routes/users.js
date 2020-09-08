@@ -1,12 +1,10 @@
-const bcrypt = require('bcrypt');
 const { omit } = require('lodash');
-const jwt = require('jsonwebtoken');
 const Router = require('koa-router');
 
 const User = require('../models/user');
-const config = require('../../config/app.json');
 const passport = require('../services/passport');
 const validator = require('../services/validator');
+const { hashPassword, generateJwt } = require('../services/auth');
 
 const router = new Router();
 
@@ -23,7 +21,7 @@ router.post('/login',
   (ctx) => {
     return passport.authenticate('local', { session: false }, async (err, user) => {
       if (user) {
-        user.token = jwt.sign({ userId: user._id }, config.appSecret);
+        user.token = generateJwt(user);
         user.save();
 
         ctx.body = omit(user.toJSON(), ['password']);
@@ -56,7 +54,7 @@ router.post('/register',
     const { email, password, firstName, lastName } = ctx.request.body;
     const user = await User.create({
       email,
-      password: bcrypt.hashSync(password, 2),
+      password: hashPassword(password),
       firstName,
       lastName,
     });

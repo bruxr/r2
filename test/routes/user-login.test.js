@@ -1,5 +1,4 @@
 const faker = require('faker');
-const bcrypt = require('bcrypt');
 const { some } = require('lodash');
 const { expect } = require('chai');
 const mongoose = require('mongoose');
@@ -8,11 +7,12 @@ const { describe, it, beforeEach } = require('mocha');
 require('../setup');
 const { request } = require('../helpers');
 const createUsers = require('../fixtures/users');
+const { hashPassword } = require('../../app/services/auth');
 
 const testPassword = faker.internet.password();
 const testUser = {
   email: faker.internet.email(),
-  password: bcrypt.hashSync(testPassword, 2),
+  password: hashPassword(testPassword),
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
 };
