@@ -61,6 +61,7 @@ router.post('/register',
       lastName,
     });
 
+    ctx.status = 201;
     ctx.body = omit(user.toJSON(), ['password']);
     await next();
   },
