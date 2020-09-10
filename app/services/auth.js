@@ -1,9 +1,47 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const passport = require('koa-passport');
+const LocalStrategy = require('passport-local').Strategy;
+const CustomStrategy = require('passport-custom').Strategy;
 
+const User = require('../models/user');
 const config = require('../../config/app.json');
 
 const SALT_ROUNDS = 3;
+let strategy = 'local';
+let testUser = null;
+
+/**
+ * Setups authentication using Passport.
+ */
+function setupAuth() {
+  passport.serializeUser((user, done) => {
+    done(null, user);
+  });
+
+  passport.deserializeUser((user, done) => {
+    done(null, user);
+  });
+
+  passport.use(new LocalStrategy(async (username, password, done) => {
+    const user = await User.findOne({ email: username }).exec();
+    if (user) {
+      const match = await bcrypt.compare(password, user.password);
+      if (match) {
+        done(null, user);
+      } else {
+        done(null, false);
+      }
+    } else {
+      done(null, false);
+    }
+  }));
+
+  passport.use('test', new CustomStrategy((req, done) => {
+    console.log(testUser);
+    done(null, testUser);
+  }));
+}
 
 /**
  * Generates a hash from the provided password string.
@@ -36,8 +74,41 @@ function generateJwt(user) {
   return jwt.sign({ userId: user._id }, config.appSecret);
 }
 
+/**
+ * Authentication middleware that takes into account
+ * the current auth strategy.
+ * 
+ * @returns a middleware that wraps passport.authenticate
+ */
+function authenticate() {
+  return (ctx, next) => passport.authenticate(strategy)(ctx, next);
+}
+
+/**
+ * Forces a user to be logged-in always. Used for testing.
+ * 
+ * @param {User} user
+ */
+function loginAs(user) {
+  testUser = user;  
+  strategy = 'test';
+}
+
+/**
+ * Removes forced login.
+ */
+function resetLogin() {
+  testUser = null;
+  strategy = 'local';
+}
+
 module.exports = {
+  passport,
+  setupAuth,
   hashPassword,
   checkPassword,
   generateJwt,
+  authenticate,
+  loginAs,
+  resetLogin,
 };

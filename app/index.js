@@ -2,9 +2,11 @@ const Koa = require('koa');
 const passport = require('koa-passport');
 const bodyParser = require('koa-bodyparser');
 
-require('./services/passport');
-const validator = require('./services/validator');
 const usersRouter = require('./routes/users');
+const { setupAuth } = require('./services/auth');
+const validator = require('./services/validator');
+
+setupAuth();
 
 const app = new Koa();
 
