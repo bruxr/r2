@@ -15,7 +15,7 @@ describe('GET /me', () => {
   
   it('should return a 401 if not logged-in', async () => {
     const res = await request.get('/me');
-    expect(res.status).to.equal(400);
+    expect(res.status).to.equal(401);
   });
 
   it('should return the user if logged-in', async () => {

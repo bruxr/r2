@@ -3,8 +3,7 @@ const Router = require('koa-router');
 
 const User = require('../models/user');
 const validator = require('../services/validator');
-const { authenticate, passport } = require('../services/auth');
-const { hashPassword, generateJwt } = require('../services/auth');
+const { authenticate, hashPassword, checkPassword, generateJwt } = require('../services/auth');
 
 const router = new Router();
 
@@ -18,19 +17,25 @@ router.post('/login',
       notEmpty: true,
     },
   }),
-  (ctx) => {
-    return passport.authenticate('jwt', { session: false }, async (err, user) => {
-      if (user) {
-        user.token = generateJwt(user);
-        user.save();
+  async (ctx, next) => {
+    const { username, password } = ctx.request.body;
+    const user = await User.findOne({ email: username });
+    if (user && checkPassword(password, user.password)) {
+      user.token = generateJwt(user);
+      user.save();
 
-        ctx.body = omit(user.toJSON(), ['password']);
-        return ctx.login(user);
-      } else {
-        ctx.body = { error: 'Invalid credentials.' };
-        ctx.throw(400);
-      }
-    })(ctx);
+      ctx.body = omit(user.toJSON(), ['password']);
+    } else {
+      ctx.status = 400;
+      ctx.body = {
+        errors: [{
+          source: '/',
+          title: 'Invalid credentials',
+          detail: 'Invalid username and password.',
+        }],
+      };
+    }
+    await next();
   },
 );
 

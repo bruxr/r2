@@ -41,7 +41,6 @@ function setupAuth() {
   }));
 
   passport.use('test', new CustomStrategy((req, done) => {
-    console.log(testUser);
     done(null, testUser);
   }));
 }
