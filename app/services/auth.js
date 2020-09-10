@@ -1,14 +1,16 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('koa-passport');
-const LocalStrategy = require('passport-local').Strategy;
+const passportJwt = require('passport-jwt');
 const CustomStrategy = require('passport-custom').Strategy;
 
 const User = require('../models/user');
 const config = require('../../config/app.json');
 
+const { Strategy: JwtStrategy, ExtractJwt } = passportJwt;
+
 const SALT_ROUNDS = 3;
-let strategy = 'local';
+let strategy = 'jwt';
 let testUser = null;
 
 /**
@@ -23,18 +25,19 @@ function setupAuth() {
     done(null, user);
   });
 
-  passport.use(new LocalStrategy(async (username, password, done) => {
-    const user = await User.findOne({ email: username }).exec();
-    if (user) {
-      const match = await bcrypt.compare(password, user.password);
-      if (match) {
+  passport.use('jwt', new JwtStrategy({
+    secretOrKey: config.appSecret,
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken,
+  }, (req, payload, done) => {
+    User.findById(payload.userId).then((user) => {
+      if (user) {
         done(null, user);
       } else {
         done(null, false);
       }
-    } else {
-      done(null, false);
-    }
+    }, (err) => {
+      done(err);
+    });
   }));
 
   passport.use('test', new CustomStrategy((req, done) => {
@@ -99,7 +102,7 @@ function loginAs(user) {
  */
 function resetLogin() {
   testUser = null;
-  strategy = 'local';
+  strategy = 'jwt';
 }
 
 module.exports = {

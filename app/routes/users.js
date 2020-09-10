@@ -19,7 +19,7 @@ router.post('/login',
     },
   }),
   (ctx) => {
-    return passport.authenticate('local', { session: false }, async (err, user) => {
+    return passport.authenticate('jwt', { session: false }, async (err, user) => {
       if (user) {
         user.token = generateJwt(user);
         user.save();
