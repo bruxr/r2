@@ -2,8 +2,8 @@ const { omit } = require('lodash');
 const Router = require('koa-router');
 
 const User = require('../models/user');
-const passport = require('../services/passport');
 const validator = require('../services/validator');
+const { authenticate, passport } = require('../services/auth');
 const { hashPassword, generateJwt } = require('../services/auth');
 
 const router = new Router();
@@ -66,10 +66,9 @@ router.post('/register',
 );
 
 router.get('/me',
-  passport.authenticate('local'),
+  authenticate(),
   async (ctx, next) => {
-    // TODO: Update this
-    console.log(ctx.request.user);
+    ctx.body = ctx.state.user;
     await next();
   },
 );

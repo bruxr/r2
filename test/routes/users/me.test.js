@@ -1,12 +1,28 @@
-const faker = require('faker');
-const { some } = require('lodash');
 const { expect } = require('chai');
-const mongoose = require('mongoose');
-const { describe, it, beforeEach } = require('mocha');
+const { describe, it, afterEach } = require('mocha');
 
-require('../setup');
-const { request } = require('../helpers');
-const createUsers = require('../fixtures/users');
-const { hashPassword } = require('../../app/services/auth');
+require('../../setup');
+const { request } = require('../../helpers');
+const createUsers = require('../../fixtures/users');
+const { loginAs, resetLogin } = require('../../../app/services/auth');
 
-// TODO: Find a way on how to automate or a helper for logged-in users
+const testUser = createUsers()[0];
+
+describe('GET /me', () => {
+  afterEach(() => {
+    resetLogin();
+  });
+  
+  it('should return a 401 if not logged-in', async () => {
+    const res = await request.get('/me');
+    expect(res.status).to.equal(400);
+  });
+
+  it('should return the user if logged-in', async () => {
+    loginAs(testUser);
+    
+    const res = await request.get('/me');
+    expect(res.status).to.equal(200);
+    expect(res.body.email).to.equal(testUser.email);
+  });
+});
