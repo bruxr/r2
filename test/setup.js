@@ -10,9 +10,6 @@ before(async () => {
   await mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    autoReconnect: true,
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 1000,
   });
 });
 
